@@ -161,8 +161,8 @@ mixin {
     add sourceSets.main, 'moremobvariants.mixins.refmap.json'
     config 'moremobvariants.mixins.json'
 
-    debug.verbose = true
-    debug.export = true
+    // debug.verbose = true
+    // debug.export = true
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
