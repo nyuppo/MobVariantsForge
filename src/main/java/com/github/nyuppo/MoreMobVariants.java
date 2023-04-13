@@ -1,7 +1,7 @@
 package com.github.nyuppo;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +22,7 @@ public class MoreMobVariants {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     // Cat variants
-    private static final DeferredRegister<CatVariant> CAT_VARIANTS = DeferredRegister.create(Registries.CAT_VARIANT, MOD_ID);
+    private static final DeferredRegister<CatVariant> CAT_VARIANTS = DeferredRegister.create(Registry.CAT_VARIANT_REGISTRY, MOD_ID);
     public static final RegistryObject<CatVariant> GRAY_TABBY = CAT_VARIANTS.register("gray_tabby", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/gray_tabby.png")));
     public static final RegistryObject<CatVariant> DOUG = CAT_VARIANTS.register("doug", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/doug.png")));
     public static final RegistryObject<CatVariant> HANDSOME = CAT_VARIANTS.register("handsome", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/handsome.png")));
