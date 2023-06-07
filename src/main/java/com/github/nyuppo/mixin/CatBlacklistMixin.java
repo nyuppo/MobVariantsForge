@@ -3,7 +3,6 @@ package com.github.nyuppo.mixin;
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.config.VariantBlacklist;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.CatVariantTags;
 import net.minecraft.tags.TagKey;
@@ -28,10 +27,10 @@ public class CatBlacklistMixin {
 
         while (!isValidVariant) {
             CatVariant currentVariant = ((Cat)(Object)this).getVariant();
-            if ((currentVariant.equals(MoreMobVariants.DOUG) && VariantBlacklist.isBlacklisted("cat", "doug"))
-                    || (currentVariant.equals(MoreMobVariants.HANDSOME) && VariantBlacklist.isBlacklisted("cat", "handsome"))
-                    || (currentVariant.equals(MoreMobVariants.GRAY_TABBY) && VariantBlacklist.isBlacklisted("cat", "gray_tabby"))
-                    || (currentVariant.equals(MoreMobVariants.TORTOISESHELL) && VariantBlacklist.isBlacklisted("cat", "tortoiseshell"))) {
+            if ((currentVariant.equals(MoreMobVariants.DOUG.get()) && VariantBlacklist.isBlacklisted("cat", "doug"))
+                    || (currentVariant.equals(MoreMobVariants.HANDSOME.get()) && VariantBlacklist.isBlacklisted("cat", "handsome"))
+                    || (currentVariant.equals(MoreMobVariants.GRAY_TABBY.get()) && VariantBlacklist.isBlacklisted("cat", "gray_tabby"))
+                    || (currentVariant.equals(MoreMobVariants.TORTOISESHELL.get()) && VariantBlacklist.isBlacklisted("cat", "tortoiseshell"))) {
                 boolean bl = p_28134_.getMoonBrightness() > 0.9F;
                 TagKey<CatVariant> tagKey = bl ? CatVariantTags.FULL_MOON_SPAWNS : CatVariantTags.DEFAULT_SPAWNS;
                 BuiltInRegistries.CAT_VARIANT.getTag(tagKey).flatMap((list) -> {
