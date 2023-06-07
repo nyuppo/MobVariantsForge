@@ -12,7 +12,8 @@
     "SheepVariantsMixin",
     "CowVariantsMixin",
     "WolfVariantsMixin",
-    "ZombieVariantsMixin"
+    "ZombieVariantsMixin",
+    "CatBlacklistMixin"
   ],
   "client": [
     "ChickenRendererMixin",
@@ -21,7 +22,8 @@
     "CowRendererMixin",
     "WolfRendererMixin",
     "CatFluffMixin",
-    "ZombieRendererMixin"
+    "ZombieRendererMixin",
+    "PigFlowerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
