@@ -12,7 +12,8 @@
     "SheepVariantsMixin",
     "CowVariantsMixin",
     "WolfVariantsMixin",
-    "ZombieVariantsMixin"
+    "ZombieVariantsMixin",
+    "CatBlacklistMixin"
   ],
   "client": [
     "ChickenRendererMixin",
