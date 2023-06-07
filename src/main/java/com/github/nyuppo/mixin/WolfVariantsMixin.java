@@ -1,5 +1,8 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantBlacklist;
+import com.github.nyuppo.config.VariantSettings;
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -81,17 +84,17 @@ public abstract class WolfVariantsMixin extends MobVariantsMixin {
                     boolean hasBred = false;
 
                     if ((thisVariant == 2 && parentVariant == 1) || (thisVariant == 1 && parentVariant == 2)) { // German shepherd
-                        if (p_148891_.getRandom().nextInt(3) == 0) {
+                        if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
                             hasBred = true;
                             i = 3;
                         }
                     } else if ((thisVariant == 1 && parentVariant == 0) || (thisVariant == 0 && parentVariant == 1)) { // Golden retriever
-                        if (p_148891_.getRandom().nextInt(3) == 0) {
+                        if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
                             hasBred = true;
                             i = 4;
                         }
                     } else if ((thisVariant == 2 && parentVariant == 4) || (thisVariant == 4 && parentVariant == 2)) { // French bulldog
-                        if (p_148891_.getRandom().nextInt(3) == 0) {
+                        if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
                             hasBred = true;
                             i = 5;
                         }
@@ -116,18 +119,18 @@ public abstract class WolfVariantsMixin extends MobVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch (variantName) {
+            case "jupiter" -> 1;
+            case "husky" -> 2;
+            case "german_shepherd" -> 3;
+            case "golden_retriever" -> 4;
+            case "french_bulldog" -> 5;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(RandomSource random) {
-        int i = random.nextInt(3);
-
-        if (i == 0) {
-            // Jupiter
-            return 1;
-        } else if (i == 1) {
-            // Husky
-            return 2;
-        }
-
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("wolf", random));
     }
 }

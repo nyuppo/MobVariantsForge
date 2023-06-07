@@ -1,5 +1,7 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantBlacklist;
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -54,8 +56,10 @@ public abstract class ChickenVariantsMixin extends MobVariantsMixin {
         int i = this.getRandomVariant(p_21434_.getRandom());
 
         // If in nether, random chance of bone chicken
-        if (p_21434_.getBiome(((Chicken)(Object)this).blockPosition()).is(BiomeTags.IS_NETHER) && p_21434_.getRandom().nextInt(6) == 0) {
-            i = 7;
+        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
+            if (p_21434_.getBiome(((Chicken)(Object)this).blockPosition()).is(BiomeTags.IS_NETHER) && p_21434_.getRandom().nextInt(6) == 0) {
+                i = 7;
+            }
         }
 
         ((Chicken)(Object)this).getEntityData().set(VARIANT_ID, i);
@@ -95,8 +99,10 @@ public abstract class ChickenVariantsMixin extends MobVariantsMixin {
         }
 
         // If in nether, random chance of bone chicken
-        if (p_148890_.getBiome(((Chicken)(Object)this).blockPosition()).is(BiomeTags.IS_NETHER) && ((Chicken)(Object)this).getRandom().nextInt(6) == 0) {
-            i = 7;
+        if (!VariantBlacklist.isBlacklisted("chicken", "bone")) {
+            if (p_148890_.getBiome(((Chicken)(Object)this).blockPosition()).is(BiomeTags.IS_NETHER) && ((Chicken)(Object)this).getRandom().nextInt(6) == 0) {
+                i = 7;
+            }
         }
 
         CompoundTag childNbt = new CompoundTag();
@@ -107,28 +113,19 @@ public abstract class ChickenVariantsMixin extends MobVariantsMixin {
         ci.setReturnValue(child);
     }
 
-    private int getRandomVariant(RandomSource random) {
-        int i = random.nextInt(14);
-        if (i == 0) {
-            // Midnight
-            return 6;
-        } else if (i > 0 && i <= 2) {
-            // Amber
-            return 1;
-        } else if (i > 2 && i <= 4) {
-            // Gold Crested
-            return 2;
-        } else if (i > 4 && i <= 6) {
-            // Bronzed
-            return 3;
-        } else if (i > 6 && i <= 8) {
-            // Skewbald
-            return 4;
-        } else if (i > 8 && i <= 10) {
-            // Stormy
-            return 5;
-        }
-        // Default
-        return 0;
+    public int getVariantID(String variantName) {
+        return switch(variantName) {
+            case "amber" -> 1;
+            case "gold_crested" -> 2;
+            case "bronzed" -> 3;
+            case "skewbald" -> 4;
+            case "stormy" -> 5;
+            case "midnight" -> 6;
+            default -> 0;
+        };
+    }
+
+    public int getRandomVariant(RandomSource random) {
+        return getVariantID(VariantWeights.getRandomVariant("chicken", random));
     }
 }

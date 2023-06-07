@@ -1,5 +1,6 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -92,21 +93,16 @@ public abstract class SheepVariantsMixin extends MobVariantsMixin {
         ci.setReturnValue(child);
     }
 
+    private int getVariantID(String variantName) {
+        return switch(variantName) {
+            case "patched" -> 1;
+            case "fuzzy" -> 2;
+            case "rocky" -> 3;
+            default -> 0;
+        };
+    }
+
     private int getRandomVariant(RandomSource random) {
-        int i = random.nextInt(6);
-
-        if (i == 0) {
-            // Patched
-            return 1;
-        } else if (i == 1) {
-            // Fuzzy
-            return 2;
-        } else if (i == 3) {
-            // Rocky
-            return 3;
-        }
-
-        // Default
-        return 0;
+        return getVariantID(VariantWeights.getRandomVariant("sheep", random));
     }
 }
