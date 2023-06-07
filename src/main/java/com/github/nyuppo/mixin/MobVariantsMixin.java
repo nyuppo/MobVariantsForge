@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
-
 @Mixin(Mob.class)
 public class MobVariantsMixin {
     @Inject(
@@ -45,6 +43,14 @@ public class MobVariantsMixin {
             at = @At("RETURN")
     )
     protected void onFinalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, SpawnGroupData p_21437_, CompoundTag p_21438_, CallbackInfoReturnable<SpawnGroupData> cir) {
+
+    }
+
+    @Inject(
+            method = "tick",
+            at = @At("RETURN")
+    )
+    protected void onTick(CallbackInfo ci) {
 
     }
 }

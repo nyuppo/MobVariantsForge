@@ -1,5 +1,6 @@
 package com.github.nyuppo;
 
+import com.github.nyuppo.client.renderer.entity.layers.PigMudLayer;
 import com.github.nyuppo.config.VariantBlacklist;
 import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.VariantWeights;
@@ -8,6 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.SpiderRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -16,8 +21,12 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterNamedRenderTypesEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -35,6 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mod(MoreMobVariants.MOD_ID)
 public class MoreMobVariants {
@@ -59,6 +69,9 @@ public class MoreMobVariants {
 
         // Register cat variants
         CAT_VARIANTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        // Add render layers
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::addLayers);
     }
 
     @SubscribeEvent
@@ -153,5 +166,16 @@ public class MoreMobVariants {
                 }
             }
         });
+    }
+
+    public void addLayers(EntityRenderersEvent.AddLayers event) {
+        addLayerToRenderer(event, EntityType.PIG, PigMudLayer::new);
+    }
+
+    // Thanks gigaherz
+    private static <T extends LivingEntity, R extends LivingEntityRenderer<T, M>, M extends EntityModel<T>> void addLayerToRenderer(EntityRenderersEvent.AddLayers event, EntityType<T> entityType, Function<R, ? extends RenderLayer<T,M>> factory)
+    {
+        R renderer = event.getRenderer(entityType);
+        if (renderer != null) renderer.addLayer(factory.apply(renderer));
     }
 }

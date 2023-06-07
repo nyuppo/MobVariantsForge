@@ -1,5 +1,7 @@
 package com.github.nyuppo.mixin;
 
+import com.github.nyuppo.MoreMobVariants;
+import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.VariantWeights;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,25 +35,42 @@ public abstract class PigVariantsMixin extends MobVariantsMixin {
     // 4 = sooty
     // 5 = spotted
 
+    private static final EntityDataAccessor<Boolean> MUDDY_ID = SynchedEntityData.defineId(Pig.class, EntityDataSerializers.BOOLEAN);
+    private static final String MUDDY_NBT_KEY = "IsMuddy";
+
     @Override
     protected void onDefineSynchedData(CallbackInfo ci) {
         ((Pig)(Object)this).getEntityData().define(VARIANT_ID, 0);
+        ((Pig)(Object)this).getEntityData().define(MUDDY_ID, false);
     }
 
     @Override
     protected void onAddAdditionalSaveData(CompoundTag p_21484_, CallbackInfo ci) {
         p_21484_.putInt(NBT_KEY, ((Pig)(Object)this).getEntityData().get(VARIANT_ID));
+        p_21484_.putBoolean(MUDDY_NBT_KEY, ((Pig)(Object)this).getEntityData().get(MUDDY_ID));
     }
 
     @Override
     protected void onReadAdditionalSaveData(CompoundTag p_21450_, CallbackInfo ci) {
         ((Pig)(Object)this).getEntityData().set(VARIANT_ID, p_21450_.getInt(NBT_KEY));
+        ((Pig)(Object)this).getEntityData().set(MUDDY_ID, p_21450_.getBoolean(MUDDY_NBT_KEY));
     }
 
     @Override
     protected void onFinalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, SpawnGroupData p_21437_, CompoundTag p_21438_, CallbackInfoReturnable<SpawnGroupData> cir) {
         int i = this.getRandomVariant(p_21434_.getRandom());
         ((Pig)(Object)this).getEntityData().set(VARIANT_ID, i);
+    }
+
+    @Override
+    protected void onTick(CallbackInfo ci) {
+        if (VariantSettings.getEnableMuddyPigs()) {
+            if (((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition()).is(MoreMobVariants.PIG_MUD_BLOCKS) || ((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition().below()).is(MoreMobVariants.PIG_MUD_BLOCKS)) {
+                ((Pig)(Object)this).getEntityData().set(MUDDY_ID, true);
+            } else if (((Pig)(Object)this).isInWaterOrRain()) {
+                ((Pig)(Object)this).getEntityData().set(MUDDY_ID, false);
+            }
+        }
     }
 
     @Inject(
