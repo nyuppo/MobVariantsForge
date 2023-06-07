@@ -4,16 +4,12 @@ import com.github.nyuppo.client.renderer.entity.layers.PigMudLayer;
 import com.github.nyuppo.config.VariantBlacklist;
 import com.github.nyuppo.config.VariantSettings;
 import com.github.nyuppo.config.VariantWeights;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.SpiderRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -52,7 +48,7 @@ public class MoreMobVariants {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     // Cat variants
-    private static final DeferredRegister<CatVariant> CAT_VARIANTS = DeferredRegister.create(Registries.CAT_VARIANT, MOD_ID);
+    private static final DeferredRegister<CatVariant> CAT_VARIANTS = DeferredRegister.create(Registry.CAT_VARIANT_REGISTRY, MOD_ID);
     public static final RegistryObject<CatVariant> GRAY_TABBY = CAT_VARIANTS.register("gray_tabby", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/gray_tabby.png")));
     public static final RegistryObject<CatVariant> DOUG = CAT_VARIANTS.register("doug", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/doug.png")));
     public static final RegistryObject<CatVariant> HANDSOME = CAT_VARIANTS.register("handsome", () -> new CatVariant(new ResourceLocation(MOD_ID, "textures/entity/cat/handsome.png")));
@@ -129,7 +125,12 @@ public class MoreMobVariants {
 
                 if (element.getAsJsonObject().size() != 0) {
                     if (element.getAsJsonObject().has("weights")) {
-                        Map<String, JsonElement> weights = element.getAsJsonObject().get("weights").getAsJsonObject().asMap();
+                        // JsonObject.asMap() doesn't exist yet, so do it manually I guess
+                        JsonObject mapObject = element.getAsJsonObject().get("weights").getAsJsonObject();
+                        Map<String, JsonElement> weights = new HashMap<String, JsonElement>();
+                        for (String key : mapObject.keySet()) {
+                            weights.put(key, mapObject.get(key));
+                        }
                         HashMap<String, Integer> weightsConverted = new HashMap<String, Integer>();
                         for (Map.Entry entry : weights.entrySet()) {
                             weightsConverted.put(entry.getKey().toString(), ((JsonElement)entry.getValue()).getAsInt());
