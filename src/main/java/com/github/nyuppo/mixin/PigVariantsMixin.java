@@ -65,7 +65,7 @@ public abstract class PigVariantsMixin extends MobVariantsMixin {
     @Override
     protected void onTick(CallbackInfo ci) {
         if (VariantSettings.getEnableMuddyPigs()) {
-            if (((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition()).is(MoreMobVariants.PIG_MUD_BLOCKS) || ((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition().below()).is(MoreMobVariants.PIG_MUD_BLOCKS)) {
+            if (((Pig)(Object)this).level().getBlockState(((Pig)(Object)this).blockPosition()).is(MoreMobVariants.PIG_MUD_BLOCKS) || ((Pig)(Object)this).level().getBlockState(((Pig)(Object)this).blockPosition().below()).is(MoreMobVariants.PIG_MUD_BLOCKS)) {
                 ((Pig)(Object)this).getEntityData().set(MUDDY_ID, true);
             } else if (((Pig)(Object)this).isInWaterOrRain()) {
                 ((Pig)(Object)this).getEntityData().set(MUDDY_ID, false);
