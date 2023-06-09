@@ -12,6 +12,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,57 +23,41 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Zombie.class)
 public abstract class ZombieVariantsMixin extends MobVariantsMixin {
-    private static final EntityDataAccessor<Integer> VARIANT_ID =
-            SynchedEntityData.defineId(Zombie.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> VARIANT_ID =
+            SynchedEntityData.defineId(Zombie.class, EntityDataSerializers.STRING);
     private static final String NBT_KEY = "Variant";
-    /*
-     *   0 = steve (default)
-     *   1 = alex
-     *   2 = ari
-     *   3 = efe
-     *   4 = kai
-     *   5 = makena
-     *   6 = noor
-     *   7 = sunny
-     *   8 = zuri
-     */
 
     @Override
     protected void onDefineSynchedData(CallbackInfo ci) {
-        ((Zombie)(Object)this).getEntityData().define(VARIANT_ID, 0);
+        ((Zombie)(Object)this).getEntityData().define(VARIANT_ID, "default");
     }
 
     @Override
     protected void onAddAdditionalSaveData(CompoundTag p_21484_, CallbackInfo ci) {
-        p_21484_.putInt(NBT_KEY, ((Zombie)(Object)this).getEntityData().get(VARIANT_ID));
+        p_21484_.putString(NBT_KEY, ((Zombie)(Object)this).getEntityData().get(VARIANT_ID));
     }
 
     @Override
     protected void onReadAdditionalSaveData(CompoundTag p_21450_, CallbackInfo ci) {
-        ((Zombie)(Object)this).getEntityData().set(VARIANT_ID, p_21450_.getInt(NBT_KEY));
+        ((Zombie)(Object)this).getEntityData().set(VARIANT_ID, p_21450_.getString(NBT_KEY));
     }
 
     @Override
     protected void onFinalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, SpawnGroupData p_21437_, CompoundTag p_21438_, CallbackInfoReturnable<SpawnGroupData> cir) {
-        int i = this.getRandomVariant(p_21434_.getRandom());
-        ((Zombie)(Object)this).getEntityData().set(VARIANT_ID, i);
+        String variant = this.getRandomVariant(p_21434_.getRandom());
+        ((Zombie)(Object)this).getEntityData().set(VARIANT_ID, variant);
     }
 
-    private int getVariantID(String variantName) {
-        return switch (variantName) {
-            case "alex" -> 1;
-            case "ari" -> 2;
-            case "efe" -> 3;
-            case "kai" -> 4;
-            case "makena" -> 5;
-            case "noor" -> 6;
-            case "sunny" -> 7;
-            case "zuri" -> 8;
-            default -> 0;
-        };
+    @Override
+    protected void onTick(CallbackInfo ci) {
+        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
+        if (((Zombie)(Object)this).getEntityData().get(VARIANT_ID).isEmpty()) {
+            String variant = this.getRandomVariant(((Zombie)(Object)this).level().getRandom());
+            ((Zombie)(Object)this).getEntityData().set(VARIANT_ID, variant);
+        }
     }
 
-    private int getRandomVariant(RandomSource random) {
-        return getVariantID(VariantWeights.getRandomVariant("zombie", random));
+    private String getRandomVariant(RandomSource random) {
+        return VariantWeights.getRandomVariant("zombie", random);
     }
 }

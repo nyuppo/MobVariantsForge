@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SheepRenderer.class)
 public class SheepRendererMixin {
     private static final ResourceLocation DEFAULT = new ResourceLocation("textures/entity/sheep/sheep.png");
-    private static final ResourceLocation PATCHED = new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/sheep/patched.png");
-    private static final ResourceLocation FUZZY = new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/sheep/fuzzy.png");
-    private static final ResourceLocation ROCKY = new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/sheep/rocky.png");
 
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/animal/Sheep;)Lnet/minecraft/resources/ResourceLocation;", at = @At("HEAD"), cancellable = true)
     private void onGetTextureLocation(Sheep p_115840_, CallbackInfoReturnable<ResourceLocation> ci) {
@@ -24,21 +21,11 @@ public class SheepRendererMixin {
         p_115840_.saveWithoutId(nbt);
 
         if (nbt.contains("Variant")) {
-            int i = nbt.getInt("Variant");
-            switch (i) {
-                case 1:
-                    ci.setReturnValue(PATCHED);
-                    break;
-                case 2:
-                    ci.setReturnValue(FUZZY);
-                    break;
-                case 3:
-                    ci.setReturnValue(ROCKY);
-                    break;
-                case 0:
-                default:
-                    ci.setReturnValue(DEFAULT);
-                    break;
+            String variant = nbt.getString("Variant");
+            if (variant.equals("default")) {
+                ci.setReturnValue(DEFAULT);
+            } else {
+                ci.setReturnValue(new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/sheep/" + variant + ".png"));
             }
         }
     }

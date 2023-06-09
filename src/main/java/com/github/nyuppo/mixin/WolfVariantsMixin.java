@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,35 +26,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Wolf.class)
 public abstract class WolfVariantsMixin extends MobVariantsMixin {
-    private static final EntityDataAccessor<Integer> VARIANT_ID =
-            SynchedEntityData.defineId(Wolf.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> VARIANT_ID =
+            SynchedEntityData.defineId(Wolf.class, EntityDataSerializers.STRING);
     private static final String NBT_KEY = "Variant";
-    // 0 = default
-    // 1 = jupiter
-    // 2 = husky
-    // 3 = german shepherd
-    // 4 = golden retriever
-    // 5 = french bulldog
 
     @Override
     protected void onDefineSynchedData(CallbackInfo ci) {
-        ((Wolf)(Object)this).getEntityData().define(VARIANT_ID, 0);
+        ((Wolf)(Object)this).getEntityData().define(VARIANT_ID, "default");
     }
 
     @Override
     protected void onAddAdditionalSaveData(CompoundTag p_21484_, CallbackInfo ci) {
-        p_21484_.putInt(NBT_KEY, ((Wolf)(Object)this).getEntityData().get(VARIANT_ID));
+        p_21484_.putString(NBT_KEY, ((Wolf)(Object)this).getEntityData().get(VARIANT_ID));
     }
 
     @Override
     protected void onReadAdditionalSaveData(CompoundTag p_21450_, CallbackInfo ci) {
-        ((Wolf)(Object)this).getEntityData().set(VARIANT_ID, p_21450_.getInt(NBT_KEY));
+        ((Wolf)(Object)this).getEntityData().set(VARIANT_ID, p_21450_.getString(NBT_KEY));
     }
 
     @Override
     protected void onFinalizeSpawn(ServerLevelAccessor p_21434_, DifficultyInstance p_21435_, MobSpawnType p_21436_, SpawnGroupData p_21437_, CompoundTag p_21438_, CallbackInfoReturnable<SpawnGroupData> cir) {
-        int i = this.getRandomVariant(p_21434_.getRandom());
-        ((Wolf)(Object)this).getEntityData().set(VARIANT_ID, i);
+        String variant = this.getRandomVariant(p_21434_.getRandom());
+        ((Wolf)(Object)this).getEntityData().set(VARIANT_ID, variant);
+    }
+
+    @Override
+    protected void onTick(CallbackInfo ci) {
+        // Handle the NBT storage change from 1.2.0 -> 1.2.1 that could result in empty variant id
+        if (((Wolf)(Object)this).getEntityData().get(VARIANT_ID).isEmpty()) {
+            String variant = this.getRandomVariant(((Wolf)(Object)this).level().getRandom());
+            ((Wolf)(Object)this).getEntityData().set(VARIANT_ID, variant);
+        }
     }
 
     @Inject(
@@ -64,7 +68,7 @@ public abstract class WolfVariantsMixin extends MobVariantsMixin {
     private void onGetBreedOffspring(ServerLevel p_148890_, AgeableMob p_148891_, CallbackInfoReturnable<Wolf> ci) {
         Wolf child = (Wolf) EntityType.WOLF.create(p_148890_);
 
-        int i = 0;
+        String variant = "default";
         if (p_148891_.getRandom().nextInt(4) != 0) {
             // Make child inherit parent's variants
             CompoundTag thisNbt = new CompoundTag();
@@ -73,64 +77,53 @@ public abstract class WolfVariantsMixin extends MobVariantsMixin {
             p_148891_.saveWithoutId(parentNbt);
 
             if (thisNbt.contains(NBT_KEY) && parentNbt.contains(NBT_KEY)) {
-                int thisVariant = thisNbt.getInt(NBT_KEY);
-                int parentVariant = parentNbt.getInt(NBT_KEY);
+                String thisVariant = thisNbt.getString(NBT_KEY);
+                String parentVariant = parentNbt.getString(NBT_KEY);
 
-                if (thisVariant == parentVariant) {
+                if (thisVariant.equals(parentVariant)) {
                     // If both parents are the same variant, just pick that one
-                    i = thisVariant;
+                    variant = thisVariant;
                 } else {
                     // Handle breeding
                     boolean hasBred = false;
 
-                    if ((thisVariant == 2 && parentVariant == 1) || (thisVariant == 1 && parentVariant == 2)) { // German shepherd
+                    if ((thisVariant.equals("husky") && parentVariant.equals("jupiter")) || (thisVariant.equals("jupiter") && parentVariant.equals("husky"))) { // German shepherd
                         if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "german_shepherd")) {
                             hasBred = true;
-                            i = 3;
+                            variant = "german_shepherd";
                         }
-                    } else if ((thisVariant == 1 && parentVariant == 0) || (thisVariant == 0 && parentVariant == 1)) { // Golden retriever
+                    } else if ((thisVariant.equals("jupiter") && parentVariant.equals("default")) || (thisVariant.equals("default") && parentVariant.equals("jupiter"))) { // Golden retriever
                         if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "golden_retriever")) {
                             hasBred = true;
-                            i = 4;
+                            variant = "golden_retriever";
                         }
-                    } else if ((thisVariant == 2 && parentVariant == 4) || (thisVariant == 4 && parentVariant == 2)) { // French bulldog
+                    } else if ((thisVariant.equals("husky") && parentVariant.equals("golden_retriever")) || (thisVariant.equals("golden_retriever") && parentVariant.equals("husky"))) { // French bulldog
                         if (p_148891_.getRandom().nextInt(10) < VariantSettings.getWolfBreedingChance() && !VariantBlacklist.isBlacklisted("wolf", "french_bulldog")) {
                             hasBred = true;
-                            i = 5;
+                            variant = "french_bulldog";
                         }
                     }
 
                     // Otherwise, pick a random parent's variant
                     if (!hasBred) {
-                        i = p_148891_.getRandom().nextBoolean() ? thisVariant : parentVariant;
+                        variant = p_148891_.getRandom().nextBoolean() ? thisVariant : parentVariant;
                     }
                 }
             }
         } else {
             // Give child random variant
-            i = this.getRandomVariant(p_148891_.getRandom());
+            variant = this.getRandomVariant(p_148891_.getRandom());
         }
 
         CompoundTag childNbt = new CompoundTag();
         child.saveWithoutId(childNbt);
-        childNbt.putInt(NBT_KEY, i);
+        childNbt.putString(NBT_KEY, variant);
         child.readAdditionalSaveData(childNbt);
 
         ci.setReturnValue(child);
     }
 
-    private int getVariantID(String variantName) {
-        return switch (variantName) {
-            case "jupiter" -> 1;
-            case "husky" -> 2;
-            case "german_shepherd" -> 3;
-            case "golden_retriever" -> 4;
-            case "french_bulldog" -> 5;
-            default -> 0;
-        };
-    }
-
-    private int getRandomVariant(RandomSource random) {
-        return getVariantID(VariantWeights.getRandomVariant("wolf", random));
+    private String getRandomVariant(RandomSource random) {
+        return VariantWeights.getRandomVariant("wolf", random);
     }
 }
