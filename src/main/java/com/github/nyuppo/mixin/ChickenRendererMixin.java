@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.entity.ChickenRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Chicken;
-import net.minecraft.world.entity.animal.Cow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
