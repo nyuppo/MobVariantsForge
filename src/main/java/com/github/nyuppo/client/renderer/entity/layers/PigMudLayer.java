@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PigMudLayer extends RenderLayer<Pig, PigModel<Pig>> {
-    private static final RenderType MUD_SKIN = RenderType.entityTranslucent(new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/pig/mud_overlay.png"));
+    private static final RenderType MUD_SKIN = RenderType.entityTranslucent(new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/pig/mud/mud_overlay.png"));
     private static final String MUDDY_NBT_KEY = "IsMuddy";
 
     public PigMudLayer(RenderLayerParent<Pig, PigModel<Pig>> p_117507_) {
