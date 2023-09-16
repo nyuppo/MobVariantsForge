@@ -23,7 +23,7 @@ public class WolfRendererMixin {
 
         if (nbt.contains("Variant")) {
             String variant = nbt.getString("Variant");
-            if (variant.equals("default")) {
+            if (variant.equals("default") || variant.isEmpty()) {
                 if (p_116526_.isTame()) {
                     ci.setReturnValue(DEFAULT_TAMED);
                 } else {
