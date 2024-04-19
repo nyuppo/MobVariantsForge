@@ -62,7 +62,7 @@ public class S2CRespondVariantPacket {
         this.sitting = false;
     }
 
-    public S2CRespondVariantPacket(int id, boolean sitting, String variant) {
+    public S2CRespondVariantPacket(int id, String variant, boolean sitting) {
         this.id = id;
         this.variant = variant;
         this.responseType = 3;
@@ -158,6 +158,7 @@ public class S2CRespondVariantPacket {
     }
 
     public void setSitting(boolean sitting) {
+        this.responseType = 3;
         this.sitting = sitting;
     }
 }
