@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraftforge.network.NetworkEvent;
@@ -26,6 +27,8 @@ public class S2CRespondVariantPacketHandler {
                     nbt.putInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY, msg.getMuddyTimeout());
                 } else if (entity instanceof Sheep && msg.getResponseType() == 2) {
                     nbt.putString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY, msg.getHornColour());
+                } else if (entity instanceof TamableAnimal && msg.getResponseType() == 3) {
+                    nbt.putBoolean("Sitting", msg.isSitting());
                 }
 
                 entity.load(nbt);
