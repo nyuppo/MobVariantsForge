@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class S2CRespondVariantPacket {
     private final int id;
     private final String variant;
-    private byte responseType; // 0 = default, 1 = pig, 2 = sheep
+    private byte responseType; // 0 = default, 1 = pig, 2 = sheep, 3 = tameable
 
     // Pigs
     private boolean isMuddy;
@@ -19,6 +19,9 @@ public class S2CRespondVariantPacket {
 
     // Sheep
     private String hornColour;
+
+    // Tameables
+    private boolean sitting;
 
     public S2CRespondVariantPacket(int id, String variant) {
         this.id = id;
@@ -29,6 +32,8 @@ public class S2CRespondVariantPacket {
         this.muddyTimeout = 0;
 
         this.hornColour = "";
+
+        this.sitting = false;
     }
 
     public S2CRespondVariantPacket(int id, String variant, boolean isMuddy, int muddyTimeout) {
@@ -40,6 +45,8 @@ public class S2CRespondVariantPacket {
         this.muddyTimeout = muddyTimeout;
 
         this.hornColour = "";
+
+        this.sitting = false;
     }
 
     public S2CRespondVariantPacket(int id, String variant, String hornColour) {
@@ -51,6 +58,21 @@ public class S2CRespondVariantPacket {
         this.muddyTimeout = 0;
 
         this.hornColour = hornColour;
+
+        this.sitting = false;
+    }
+
+    public S2CRespondVariantPacket(int id, boolean sitting, String variant) {
+        this.id = id;
+        this.variant = variant;
+        this.responseType = 3;
+
+        this.isMuddy = false;
+        this.muddyTimeout = 0;
+
+        this.hornColour = "";
+
+        this.sitting = sitting;
     }
 
     public S2CRespondVariantPacket(FriendlyByteBuf buffer) {
@@ -69,6 +91,8 @@ public class S2CRespondVariantPacket {
             this.muddyTimeout = buffer.readInt();
         } else if (this.responseType == 2) {
             this.hornColour = buffer.readUtf();
+        } else if (this.responseType == 3) {
+            this.sitting = buffer.readBoolean();
         }
     }
 
@@ -82,6 +106,8 @@ public class S2CRespondVariantPacket {
             buffer.writeInt(this.muddyTimeout);
         } else if (this.responseType == 2) {
             buffer.writeUtf(this.hornColour);
+        } else if (this.responseType == 3) {
+            buffer.writeBoolean(this.sitting);
         }
     }
 
@@ -125,5 +151,13 @@ public class S2CRespondVariantPacket {
     public void setSheepData(String hornColour) {
         this.responseType = 2;
         this.hornColour = hornColour;
+    }
+
+    public boolean isSitting() {
+        return this.sitting;
+    }
+
+    public void setSitting(boolean sitting) {
+        this.sitting = sitting;
     }
 }

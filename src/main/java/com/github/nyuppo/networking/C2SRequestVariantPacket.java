@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraftforge.network.NetworkDirection;
@@ -60,6 +61,8 @@ public class C2SRequestVariantPacket {
                                 packet.setPigData(nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY), nbt.getInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY));
                             } else if (entity instanceof Sheep) {
                                 packet.setSheepData(nbt.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY));
+                            } else if (entity instanceof TamableAnimal) {
+                                packet.setSitting(nbt.getBoolean("Sitting"));
                             }
 
                             MMVPacketHandler.sendToClient(packet, sender);
