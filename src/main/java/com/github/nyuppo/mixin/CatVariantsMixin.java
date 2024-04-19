@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Cat.class)
 public class CatVariantsMixin extends MobVariantsMixin {
-    private MobVariant variant = getDefaultVariant();
+    private MobVariant variant = Variants.getDefaultVariant(EntityType.CAT);
 
     @Override
     protected void onAddAdditionalSaveData(CompoundTag nbt, CallbackInfo ci) {
@@ -63,9 +63,5 @@ public class CatVariantsMixin extends MobVariantsMixin {
                 ((Cat)(Object)this).setPersistenceRequired();
             }
         }
-    }
-
-    private MobVariant getDefaultVariant() {
-        return new MobVariant(new ResourceLocation("tabby"), 1);
     }
 }
