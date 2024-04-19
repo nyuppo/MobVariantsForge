@@ -3,22 +3,21 @@ package com.github.nyuppo.networking;
 import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.SimpleChannel;
 
 public class MMVPacketHandler {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final int PROTOCOL_VERSION = 1;
     private static SimpleChannel INSTANCE;
 
     public static void registerPackets() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(
-                new ResourceLocation(MoreMobVariants.MOD_ID, "main"),
-                () -> PROTOCOL_VERSION,
-                (protocolVersion -> true),
-                (protocolVersion -> true)
-        );
+        INSTANCE = ChannelBuilder
+                .named(MoreMobVariants.id("main"))
+                .networkProtocolVersion(PROTOCOL_VERSION)
+                .acceptedVersions((s, v) -> true)
+                .simpleChannel();
 
         INSTANCE.messageBuilder(C2SRequestVariantPacket.class, 0)
                 .encoder(C2SRequestVariantPacket::encode)
@@ -34,14 +33,14 @@ public class MMVPacketHandler {
     }
 
     public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
+        INSTANCE.send(msg, PacketDistributor.SERVER.noArg());
     }
 
     public static void sendToAllClients(Object msg) {
-        INSTANCE.send(PacketDistributor.ALL.noArg(), msg);
+        INSTANCE.send(msg, PacketDistributor.ALL.noArg());
     }
 
     public static void sendToClient(Object msg, ServerPlayer serverPlayer) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), msg);
+        INSTANCE.send(msg, PacketDistributor.PLAYER.with(serverPlayer));
     }
 }

@@ -2,18 +2,15 @@ package com.github.nyuppo.networking;
 
 import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class S2CRespondVariantPacketHandler {
-    public static void handlePacket(S2CRespondVariantPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handlePacket(S2CRespondVariantPacket msg, CustomPayloadEvent.Context ctx) {
         if (Minecraft.getInstance().level != null) {
             Entity entity = Minecraft.getInstance().level.getEntity(msg.getId());
             if (entity != null) {

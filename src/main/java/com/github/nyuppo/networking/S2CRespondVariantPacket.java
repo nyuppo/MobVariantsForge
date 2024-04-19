@@ -2,11 +2,8 @@ package com.github.nyuppo.networking;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.Optional;
-import java.util.function.Supplier;
 
 public class S2CRespondVariantPacket {
     private final int id;
@@ -111,11 +108,11 @@ public class S2CRespondVariantPacket {
         }
     }
 
-    public static void handle(S2CRespondVariantPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
+    public static void handle(S2CRespondVariantPacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> S2CRespondVariantPacketHandler.handlePacket(msg, ctx));
         });
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 
     public int getId() {

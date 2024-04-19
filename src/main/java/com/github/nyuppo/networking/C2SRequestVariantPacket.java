@@ -10,11 +10,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class C2SRequestVariantPacket {
     private final UUID uuid;
@@ -31,9 +29,9 @@ public class C2SRequestVariantPacket {
         buffer.writeUUID(this.uuid);
     }
 
-    public static void handle(C2SRequestVariantPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer sender = ctx.get().getSender(); // client that sent packet
+    public static void handle(C2SRequestVariantPacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
+            ServerPlayer sender = ctx.getSender(); // client that sent packet
             if (sender != null) {
                 MinecraftServer server = sender.getServer();
                 if (server != null) {
@@ -72,6 +70,6 @@ public class C2SRequestVariantPacket {
             }
         });
 
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 }
