@@ -289,6 +289,24 @@ public class Variants {
         )));
 
         defaultVariants = new HashMap<EntityType<?>, ArrayList<MobVariant>>();
+        defaultVariants.put(EntityType.CAT, new ArrayList<>(List.of(
+                new MobVariant(new ResourceLocation("all_black"), 1)
+                        .addModifier(new MoonPhaseModifier(0.9f)),
+                new MobVariant(new ResourceLocation("black"), 1),
+                new MobVariant(new ResourceLocation("british_shorthair"), 1),
+                new MobVariant(new ResourceLocation("calico"), 1),
+                new MobVariant(new ResourceLocation("jellie"), 1),
+                new MobVariant(new ResourceLocation("persian"), 1),
+                new MobVariant(new ResourceLocation("ragdoll"), 1),
+                new MobVariant(new ResourceLocation("red"), 1),
+                new MobVariant(new ResourceLocation("siamese"), 1),
+                new MobVariant(new ResourceLocation("tabby"), 1),
+                new MobVariant(new ResourceLocation("white"), 1),
+                new MobVariant(MoreMobVariants.id("doug"), 1),
+                new MobVariant(MoreMobVariants.id("gray_tabby"), 1),
+                new MobVariant(MoreMobVariants.id("handsome"), 1),
+                new MobVariant(MoreMobVariants.id("tortoiseshell"), 1)
+        )));
         defaultVariants.put(EntityType.CHICKEN, new ArrayList<>(List.of(
                 new MobVariant(MoreMobVariants.id("midnight"), 1),
                 new MobVariant(MoreMobVariants.id("amber"), 2),
