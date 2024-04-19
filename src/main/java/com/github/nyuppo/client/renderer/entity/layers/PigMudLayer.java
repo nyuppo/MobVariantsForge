@@ -19,7 +19,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class PigMudLayer extends RenderLayer<Pig, PigModel<Pig>> {
     private static final RenderType MUD_SKIN = RenderType.entityTranslucent(new ResourceLocation(MoreMobVariants.MOD_ID, "textures/entity/pig/mud/mud_overlay.png"));
-    private static final String MUDDY_NBT_KEY = "IsMuddy";
 
     public PigMudLayer(RenderLayerParent<Pig, PigModel<Pig>> p_117507_) {
         super(p_117507_);
@@ -30,8 +29,8 @@ public class PigMudLayer extends RenderLayer<Pig, PigModel<Pig>> {
         CompoundTag nbt = new CompoundTag();
         p_117352_.addAdditionalSaveData(nbt);
 
-        if (nbt.contains(MUDDY_NBT_KEY)) {
-            if (nbt.getBoolean(MUDDY_NBT_KEY)) {
+        if (nbt.contains(MoreMobVariants.MUDDY_NBT_KEY)) {
+            if (nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY)) {
                 VertexConsumer vertexConsumer = p_117350_.getBuffer(this.getMudTexture());
                 ((Model)this.getParentModel()).renderToBuffer(p_117349_, vertexConsumer, 0xF00000, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
             }

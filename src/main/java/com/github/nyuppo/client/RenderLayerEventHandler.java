@@ -2,6 +2,8 @@ package com.github.nyuppo.client;
 
 import com.github.nyuppo.MoreMobVariants;
 import com.github.nyuppo.client.renderer.entity.layers.PigMudLayer;
+import com.github.nyuppo.client.renderer.entity.layers.ShearedWoolColorLayer;
+import com.github.nyuppo.client.renderer.entity.layers.SheepHornsLayer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -11,7 +13,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.function.Function;
 
@@ -20,6 +21,8 @@ public class RenderLayerEventHandler {
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
         addLayerToRenderer(event, EntityType.PIG, PigMudLayer::new);
+        addLayerToRenderer(event, EntityType.SHEEP, ShearedWoolColorLayer::new);
+        addLayerToRenderer(event, EntityType.SHEEP, SheepHornsLayer::new);
     }
 
     // Thanks gigaherz

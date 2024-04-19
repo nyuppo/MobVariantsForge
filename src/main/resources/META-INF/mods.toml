@@ -27,7 +27,7 @@ displayURL="https://nyuppo.github.io/moremobvariants/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="icon.png" #optional
 # A text field displayed in the mod UI
-credits="Thanks to LlamaLad7 for his help with mixins!" #optional
+credits="LlamaLad7, gigaherz, KLONOA9X6, Dev0Louis, Steveplays28" #optional
 # A text field displayed in the mod UI
 authors="${mod_authors}" #optional
 # Display Test controls the display for your mod in the server connection screen

@@ -185,6 +185,9 @@ mixin {
     // MixinGradle Settings
     add sourceSets.main, 'moremobvariants.mixins.refmap.json'
     config 'moremobvariants.mixins.json'
+
+    debug.verbose = true
+    debug.export = true
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

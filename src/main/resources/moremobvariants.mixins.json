@@ -6,24 +6,32 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MobVariantsMixin",
+    "CatVariantsMixin",
     "ChickenVariantsMixin",
     "ChickenEggMixin",
     "PigVariantsMixin",
     "SheepVariantsMixin",
+    "SkeletonVariantsMixin",
+    "SpiderVariantsMixin",
     "CowVariantsMixin",
     "WolfVariantsMixin",
-    "ZombieVariantsMixin",
-    "CatBlacklistMixin"
+    "ZombieVariantsMixin"
   ],
   "client": [
+    "CatRendererMixin",
+    "CatFluffMixin",
     "ChickenRendererMixin",
     "PigRendererMixin",
     "SheepRendererMixin",
+    "SkeletonRendererMixin",
+    "SpiderRendererMixin",
     "CowRendererMixin",
     "WolfRendererMixin",
-    "CatFluffMixin",
     "ZombieRendererMixin",
-    "PigFlowerMixin"
+    "PigFlowerMixin",
+    "SheepWoolFeatureMixin",
+    "QuadrupedModelPartAccessor",
+    "CustomEyesLayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
