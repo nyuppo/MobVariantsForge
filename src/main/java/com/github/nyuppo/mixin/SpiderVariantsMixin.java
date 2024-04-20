@@ -37,7 +37,7 @@ public abstract class SpiderVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.SPIDER, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SPIDER, ((Spider)(Object)this).level().getRandom().nextLong(), ((Spider)(Object)this).level().getBiome(((Spider)(Object)this).blockPosition()), null, ((Spider)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.SPIDER, ((Spider)(Object)this).level.getRandom().nextLong(), ((Spider)(Object)this).level.getBiome(((Spider)(Object)this).blockPosition()), null, ((Spider)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

@@ -37,7 +37,7 @@ public abstract class CowVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.COW, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.COW, ((Cow)(Object)this).level().getRandom().nextLong(), ((Cow)(Object)this).level().getBiome(((Cow)(Object)this).blockPosition()), null, ((Cow)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.COW, ((Cow)(Object)this).level.getRandom().nextLong(), ((Cow)(Object)this).level.getBiome(((Cow)(Object)this).blockPosition()), null, ((Cow)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

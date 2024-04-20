@@ -37,7 +37,7 @@ public abstract class SkeletonVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.SKELETON, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SKELETON, ((Skeleton)(Object)this).level().getRandom().nextLong(), ((Skeleton)(Object)this).level().getBiome(((Skeleton)(Object)this).blockPosition()), null, ((Skeleton)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.SKELETON, ((Skeleton)(Object)this).level.getRandom().nextLong(), ((Skeleton)(Object)this).level.getBiome(((Skeleton)(Object)this).blockPosition()), null, ((Skeleton)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

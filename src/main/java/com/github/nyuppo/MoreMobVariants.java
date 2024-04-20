@@ -10,7 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -58,19 +58,19 @@ public class MoreMobVariants {
     public static final TagKey<Block> PIG_MUD_BLOCKS = BlockTags.create(new ResourceLocation(MOD_ID, "pig_mud_blocks"));
 
     // Biome tags
-    public static final TagKey<Biome> SPAWN_MOSSY_SKELETONS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "spawn_mossy_skeletons"));
-    public static final TagKey<Biome> INCREASED_SANDY_SKELETONS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "increased_sandy_skeletons"));
-    public static final TagKey<Biome> SHEEP_SPAWN_WITH_HORNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "sheep_spawn_with_horns"));
-    public static final TagKey<Biome> SPAWN_PALE_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_pale_spawns"));
-    public static final TagKey<Biome> SPAWN_RUSTY_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_rusty_spawns"));
-    public static final TagKey<Biome> SPAWN_SPOTTED_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_spotted_spawns"));
-    public static final TagKey<Biome> SPAWN_BLACK_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_black_spawns"));
-    public static final TagKey<Biome> SPAWN_STRIPED_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_striped_spawns"));
-    public static final TagKey<Biome> SPAWN_SNOWY_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_snowy_spawns"));
-    public static final TagKey<Biome> SPAWN_ASHEN_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_ashen_spawns"));
-    public static final TagKey<Biome> SPAWN_WOODS_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_woods_spawns"));
-    public static final TagKey<Biome> SPAWN_CHESTNUT_WOLF = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "wolf_chestnut_spawns"));
-    public static final TagKey<Biome> ADDITIONAL_WOLF_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "additional_wolf_spawns"));
+    public static final TagKey<Biome> SPAWN_MOSSY_SKELETONS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "spawn_mossy_skeletons"));
+    public static final TagKey<Biome> INCREASED_SANDY_SKELETONS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "increased_sandy_skeletons"));
+    public static final TagKey<Biome> SHEEP_SPAWN_WITH_HORNS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "sheep_spawn_with_horns"));
+    public static final TagKey<Biome> SPAWN_PALE_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_pale_spawns"));
+    public static final TagKey<Biome> SPAWN_RUSTY_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_rusty_spawns"));
+    public static final TagKey<Biome> SPAWN_SPOTTED_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_spotted_spawns"));
+    public static final TagKey<Biome> SPAWN_BLACK_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_black_spawns"));
+    public static final TagKey<Biome> SPAWN_STRIPED_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_striped_spawns"));
+    public static final TagKey<Biome> SPAWN_SNOWY_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_snowy_spawns"));
+    public static final TagKey<Biome> SPAWN_ASHEN_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_ashen_spawns"));
+    public static final TagKey<Biome> SPAWN_WOODS_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_woods_spawns"));
+    public static final TagKey<Biome> SPAWN_CHESTNUT_WOLF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "wolf_chestnut_spawns"));
+    public static final TagKey<Biome> ADDITIONAL_WOLF_SPAWNS = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MOD_ID, "additional_wolf_spawns"));
 
     // Entities that can have variants (clients only request variants of these type)
     Set<EntityType> validEntities = Set.of(EntityType.CAT, EntityType.CHICKEN, EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.SKELETON, EntityType.SPIDER, EntityType.WOLF, EntityType.ZOMBIE);
@@ -96,7 +96,7 @@ public class MoreMobVariants {
         if (event.getChild() != null && validEntities.contains(event.getChild().getType())) {
             AgeableMob child = event.getChild();
 
-            MobVariant variant = Variants.getChildVariant(child.getType(), (ServerLevel)child.level(), (AgeableMob)event.getParentA(), (AgeableMob)event.getParentB());
+            MobVariant variant = Variants.getChildVariant(child.getType(), (ServerLevel)child.level, (AgeableMob)event.getParentA(), (AgeableMob)event.getParentB());
 
             // Write variant to child's NBT
             CompoundTag childNbt = new CompoundTag();
@@ -116,10 +116,10 @@ public class MoreMobVariants {
                         && !nbtParent1.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY).isEmpty()
                         && nbtParent2.contains(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY)
                         && !nbtParent2.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY).isEmpty()
-                        && child.level().getRandom().nextDouble() <= SheepHornSettings.getInheritChance()) {
-                    colour = child.level().getRandom().nextBoolean() ? nbtParent1.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY) : nbtParent2.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY);
+                        && child.level.getRandom().nextDouble() <= SheepHornSettings.getInheritChance()) {
+                    colour = child.level.getRandom().nextBoolean() ? nbtParent1.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY) : nbtParent2.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY);
                 } else {
-                    SheepHornSettings.SheepHornColour col = SheepHornSettings.getRandomSheepHornColour(child.level().getRandom(), child.level().getBiome(((Sheep)(Object)this).blockPosition()));
+                    SheepHornSettings.SheepHornColour col = SheepHornSettings.getRandomSheepHornColour(child.level.getRandom(), child.level.getBiome(((Sheep)(Object)this).blockPosition()));
                     if (col != null) {
                         colour = col.getId();
                     }
@@ -239,7 +239,7 @@ public class MoreMobVariants {
 
                     if (element.getAsJsonObject().has("biome_tag")) {
                         String[] biomesIdentifier = element.getAsJsonObject().get("biome_tag").getAsString().split(":");
-                        TagKey<Biome> biomes = TagKey.create(Registries.BIOME, new ResourceLocation(biomesIdentifier[0], biomesIdentifier[1]));
+                        TagKey<Biome> biomes = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(biomesIdentifier[0], biomesIdentifier[1]));
                         modifiers.add(new SpawnableBiomesModifier(biomes));
                     }
 

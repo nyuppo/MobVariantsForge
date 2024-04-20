@@ -38,7 +38,7 @@ public class CatVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.CAT, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.CAT, ((Cat)(Object)this).level().getRandom().nextLong(), ((Cat)(Object)this).level().getBiome(((Cat)(Object)this).blockPosition()), null, ((Cat)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.CAT, ((Cat)(Object)this).level.getRandom().nextLong(), ((Cat)(Object)this).level.getBiome(((Cat)(Object)this).blockPosition()), null, ((Cat)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

@@ -18,7 +18,7 @@ public class ChickenEggMixin {
             at = @At("STORE")
     )
     private Chicken mixin(Chicken chickenEntity) {
-        MobVariant variant = Variants.getRandomVariant(EntityType.CHICKEN, chickenEntity.level().getRandom().nextLong(), chickenEntity.level().getBiome(chickenEntity.blockPosition()), null, chickenEntity.level().getMoonBrightness());
+        MobVariant variant = Variants.getRandomVariant(EntityType.CHICKEN, chickenEntity.level.getRandom().nextLong(), chickenEntity.level.getBiome(chickenEntity.blockPosition()), null, chickenEntity.level.getMoonBrightness());
 
         CompoundTag newNbt = new CompoundTag();
         chickenEntity.saveWithoutId(newNbt);

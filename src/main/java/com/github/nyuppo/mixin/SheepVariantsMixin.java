@@ -40,7 +40,7 @@ public abstract class SheepVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.SHEEP, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.SHEEP, ((Sheep)(Object)this).level().getRandom().nextLong(), ((Sheep)(Object)this).level().getBiome(((Sheep)(Object)this).blockPosition()), null, ((Sheep)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.SHEEP, ((Sheep)(Object)this).level.getRandom().nextLong(), ((Sheep)(Object)this).level.getBiome(((Sheep)(Object)this).blockPosition()), null, ((Sheep)(Object)this).level.getMoonBrightness());
         }
         hornColour = nbt.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY);
 

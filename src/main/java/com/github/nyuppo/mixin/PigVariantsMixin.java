@@ -43,7 +43,7 @@ public abstract class PigVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.PIG, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.PIG, ((Pig)(Object)this).level().getRandom().nextLong(), ((Pig)(Object)this).level().getBiome(((Pig)(Object)this).blockPosition()), null, ((Pig)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.PIG, ((Pig)(Object)this).level.getRandom().nextLong(), ((Pig)(Object)this).level.getBiome(((Pig)(Object)this).blockPosition()), null, ((Pig)(Object)this).level.getMoonBrightness());
         }
         isMuddy = nbt.getBoolean(MoreMobVariants.MUDDY_NBT_KEY);
         muddyTimeLeft = nbt.getInt(MoreMobVariants.MUDDY_TIMEOUT_NBT_KEY);
@@ -78,7 +78,7 @@ public abstract class PigVariantsMixin extends MobVariantsMixin {
             int muddyPigTimeout = VariantSettings.getMuddyPigTimeout();
 
             if (muddyTimeLeft == -1) {
-                if (((Pig)(Object)this).level().getBlockState(((Pig)(Object)this).blockPosition()).is(MoreMobVariants.PIG_MUD_BLOCKS) || ((Pig)(Object)this).level().getBlockState(((Pig)(Object)this).blockPosition().below()).is(MoreMobVariants.PIG_MUD_BLOCKS)) {
+                if (((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition()).is(MoreMobVariants.PIG_MUD_BLOCKS) || ((Pig)(Object)this).level.getBlockState(((Pig)(Object)this).blockPosition().below()).is(MoreMobVariants.PIG_MUD_BLOCKS)) {
                     isMuddy = true;
                     if (muddyPigTimeout > 0 ) {
                         muddyTimeLeft = 20 * muddyPigTimeout;

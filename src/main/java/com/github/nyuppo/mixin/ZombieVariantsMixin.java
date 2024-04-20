@@ -34,7 +34,7 @@ public abstract class ZombieVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.ZOMBIE, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((Zombie)(Object)this).level().getRandom().nextLong(), ((Zombie)(Object)this).level().getBiome(((Zombie)(Object)this).blockPosition()), null, ((Zombie)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.ZOMBIE, ((Zombie)(Object)this).level.getRandom().nextLong(), ((Zombie)(Object)this).level.getBiome(((Zombie)(Object)this).blockPosition()), null, ((Zombie)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command

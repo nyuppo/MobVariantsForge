@@ -37,7 +37,7 @@ public abstract class WolfVariantsMixin extends MobVariantsMixin {
                 variant = Variants.getVariant(EntityType.WOLF, MoreMobVariants.id(nbt.getString(MoreMobVariants.NBT_KEY)));
             }
         } else {
-            variant = Variants.getRandomVariant(EntityType.WOLF, ((Wolf)(Object)this).level().getRandom().nextLong(), ((Wolf)(Object)this).level().getBiome(((Wolf)(Object)this).blockPosition()), null, ((Wolf)(Object)this).level().getMoonBrightness());
+            variant = Variants.getRandomVariant(EntityType.WOLF, ((Wolf)(Object)this).level.getRandom().nextLong(), ((Wolf)(Object)this).level.getBiome(((Wolf)(Object)this).blockPosition()), null, ((Wolf)(Object)this).level.getMoonBrightness());
         }
 
         // Update all players in the event that this is from modifying entity data with a command
