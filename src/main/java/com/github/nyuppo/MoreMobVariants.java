@@ -119,7 +119,7 @@ public class MoreMobVariants {
                         && child.level.getRandom().nextDouble() <= SheepHornSettings.getInheritChance()) {
                     colour = child.level.getRandom().nextBoolean() ? nbtParent1.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY) : nbtParent2.getString(MoreMobVariants.SHEEP_HORN_COLOUR_NBT_KEY);
                 } else {
-                    SheepHornSettings.SheepHornColour col = SheepHornSettings.getRandomSheepHornColour(child.level.getRandom(), child.level.getBiome(((Sheep)(Object)this).blockPosition()));
+                    SheepHornSettings.SheepHornColour col = SheepHornSettings.getRandomSheepHornColour(child.level.getRandom(), child.level.getBiome(child.blockPosition()));
                     if (col != null) {
                         colour = col.getId();
                     }
