@@ -3,11 +3,11 @@ package com.github.nyuppo.variant;
 import com.github.nyuppo.MoreMobVariants;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MobVariant {
     private final ResourceLocation identifier;
@@ -71,7 +71,7 @@ public class MobVariant {
         return MoreMobVariants.id("default");
     }
 
-    public boolean shouldDiscard(RandomSource random) {
+    public boolean shouldDiscard(Random random) {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof DiscardableModifier) {
                 return ((DiscardableModifier) modifier).shouldDiscard(random);
@@ -98,7 +98,7 @@ public class MobVariant {
         return false;
     }
 
-    public boolean shouldBreed(RandomSource random) {
+    public boolean shouldBreed(Random random) {
         for (VariantModifier modifier : this.modifiers) {
             if (modifier instanceof BreedingResultModifier) {
                 return ((BreedingResultModifier) modifier).shouldBreed(random);

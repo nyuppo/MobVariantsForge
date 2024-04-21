@@ -27,14 +27,11 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -157,7 +154,7 @@ public class MoreMobVariants {
                     // this pattern repeats a lot throughout this class and it's related classes, so hopefully you see this comment before all of that lol
 
                     if (manager.getResource(id).isPresent()) {
-                        try (InputStream stream = manager.getResource(id).get().open()) {
+                        try (InputStream stream = manager.getResource(id).getInputStream().get().open()) {
                             applyVariant(new InputStreamReader(stream, StandardCharsets.UTF_8), id.getNamespace(), split[0], split[1]);
                         } catch (Exception e) {
                             MoreMobVariants.LOGGER.error("Error occured while loading " + split[0] + " variant '" + split[1] + "' (" + id.toShortLanguageKey() + ")", e);
